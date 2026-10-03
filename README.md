@@ -1,68 +1,60 @@
-# Amma's Pantry — Stage 3 Prototype
+# Amma's Pantry — Stage 3.5
 
-A pitch-ready Indian pantry e-commerce prototype built with Next.js + Supabase.
+A pitch-ready Next.js + Supabase e-commerce prototype for a traditional Indian foods brand.
 
-## Included
-- Indian-style responsive storefront
-- Product catalog and category filters
-- Persistent browser cart
-- Checkout flow
-- Email/password login and signup
-- Customer account view
-- Supabase PostgreSQL schema + Row Level Security
-- Admin dashboard
-- Product + inventory management
-- Order status management
-- Customer overview
-- Demo mode when Supabase is not configured
+## Included now
 
-## 1. Run locally
+- Indian storefront with realistic prototype product photography
+- Search, category filters and price sorting
+- Dedicated product pages
+- Persistent cart and checkout/order creation
+- Supabase email/password authentication
+- Customer order history and saved addresses
+- Admin-only dashboard with live metrics
+- Product add/edit/hide/delete
+- Stock management and low-stock view
+- Real product photo upload to Supabase Storage
+- Admin order status management
+- Admin customer email/order/spend view via the protected `profiles` table
+- Demo Mode when Supabase environment variables are absent
 
-```bash
-npm install
-npm run dev
+## Upgrade your existing Supabase project
+
+You already ran `supabase/schema.sql` for Stage 3. Do **not** replace it.
+
+Open Supabase -> SQL Editor -> New query, paste the contents of:
+
+`supabase/stage3_5_migration.sql`
+
+and run it once.
+
+This adds the customer email mirror used by the admin console and creates the `product-images` Storage bucket with admin-only write policies.
+
+## Environment variables
+
+`.env.local` locally, and the same values in Vercel:
+
 ```
-Open http://localhost:3000
-
-Without environment variables, the app runs in **Demo Mode** using sample data and localStorage.
-
-## 2. Connect Supabase
-1. Create a project at https://supabase.com/dashboard
-2. Open **SQL Editor** and run `supabase/schema.sql`.
-3. In Supabase, open **Connect** and copy:
-   - Project URL
-   - Publishable key
-4. Copy `.env.example` to `.env.local` and fill:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-5. Restart `npm run dev`.
-6. Sign up with your own email.
-7. In Supabase SQL Editor run the final commented `update public.profiles ...` command, replacing `YOUR_EMAIL_HERE`, to give yourself admin access.
+Never expose the Supabase service-role key in `NEXT_PUBLIC_*` variables.
 
-## 3. Deploy to Vercel
-Recommended flow:
-1. Create a GitHub repository and push this project.
-2. Vercel -> Add New -> Project -> import the GitHub repo.
-3. Add the same `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` under Vercel Project -> Settings -> Environment Variables.
-4. Deploy/redeploy.
-5. In Supabase Auth -> URL Configuration, set the Site URL to your Vercel production URL.
+## Local run
 
-## Important prototype note
-Payments are intentionally not included in Stage 3. The current checkout records an order, but it does not charge the customer. Add Razorpay/UPI as a later stage before accepting real orders.
+```
+npm install
+npm run dev
+```
 
-## Main routes
-- `/` storefront
-- `/shop` catalog
-- `/cart` cart
-- `/checkout` checkout
-- `/login` / `/signup`
-- `/account`
-- `/admin`
-- `/admin/products`
-- `/admin/orders`
-- `/admin/customers`
+## Deploy update to Vercel
+
+Replace/push these updated project files to the same GitHub repository. Vercel will redeploy automatically if Git integration is enabled. The existing Vercel environment variables remain attached to the project.
+
+## Product photo workflow
+
+Admin -> Products -> Add product -> Upload photo -> Save product.
+
+The browser uploads the image to the public `product-images` bucket only after Supabase confirms the signed-in user is an admin. The product row stores the resulting public image URL.

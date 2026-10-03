@@ -25,3 +25,17 @@ export type Order = {
   customer_name?: string;
   item_count?: number;
 };
+
+export type Address = {
+  id: string;
+  user_id: string;
+  label: string;
+  recipient_name: string;
+  phone: string;
+  line1: string;
+  line2?: string | null;
+  city: string;
+  state: string;
+  pincode: string;
+  is_default: boolean;
+};
