@@ -11,6 +11,7 @@ export type Product = {
   featured: boolean;
   active: boolean;
   image_emoji: string;
+  image_url?: string | null;
 };
 
 export type CartItem = Product & { quantity: number };
