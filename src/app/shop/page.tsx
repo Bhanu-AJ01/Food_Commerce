@@ -1,0 +1,2 @@
+import { Header } from "@/components/header"; import { ProductGrid } from "@/components/product-grid";
+export default function Shop(){return <><Header/><main className="shell section"><div className="page-head"><span className="kicker red">OUR PANTRY</span><h1>Traditional favourites, ready for today.</h1><p>Browse ghee, ready mixes, spice blends, snacks and gifting.</p></div><ProductGrid/></main></>}
